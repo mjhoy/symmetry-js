@@ -39,14 +39,17 @@ var SymmetryGroup = function (rootElement, transFunc, transN) {
     _apply();
   }
 
+  // Apply transformation function from the root element
   function _apply() {
-    if (_elements.length > 0) { // remove the current cloned elements
+
+    // Reset the current cloned element array
+    if (_elements.length > 0) {
       _.each(_elements, function(el) {
         el.remove();
       });
-      _elements = []
+      _elements = [];
     }
-    _set_sym_vars(root);
+    _set_sym_vars(_root);
     _.times(_n, function() {
       var last = _elements[_elements.length - 1] || _root;
       c = last.clone();
@@ -58,20 +61,21 @@ var SymmetryGroup = function (rootElement, transFunc, transN) {
   }
 
   function _post_clone(el) {
-    if (el !== _root) {
-      post = el['sym_attrs']['post_apply'];
-      cx = post['cy'] || 0;
-      cy = post['cx'] || 0;
-      el.translate( cx, cy);
-    }
+    post = el['sym_attrs']['post_apply'];
+    cx = post['cy'] || 0;
+    cy = post['cx'] || 0;
+    el.translate( cx, cy);
+    console.log(cx, cy);
   }
 
   function _set_sym_vars(el) {
-    el['sym_attrs'] = {};
-    var s = el['sym_attrs']
-    s['root_x'] = _root.attr()['x'];
-    s['root_y'] = _root.attr()['y'];
-    s['post_apply'] = {};
+    if (el['sym_attrs'] === undefined) {
+      el['sym_attrs'] = {};
+      var s = el['sym_attrs'];
+      s['root_x'] = _root.attr()['x'];
+      s['root_y'] = _root.attr()['y'];
+      s['post_apply'] = {};
+    }
   }
   
   // -----------------
@@ -81,7 +85,7 @@ var SymmetryGroup = function (rootElement, transFunc, transN) {
   function rotate(degree, cx, cY) {
     if (degree === undefined) { return _root.rotate(); }
     var current = _root.rotate();
-    degree = parseInt(degree) + parseInt(current);
+    degree = parseInt(degree, 10) + parseInt(current, 10);
     _root.rotate(degree, cx, cY);
     _apply();
    // console.log(degree);
@@ -89,6 +93,7 @@ var SymmetryGroup = function (rootElement, transFunc, transN) {
       // capture previous rotation
       //el.rotate(parseInt(degree, cx, cY);
     //});
+    return this;
   }
 
   function translate(dx, dy) {
@@ -138,20 +143,34 @@ var SymmetryGroup = function (rootElement, transFunc, transN) {
 /* Raphael extensions */
 (function (R) {
   function degToRad(deg) {
-    return (deg * (2 * Math.PI)) / 360
+    return (deg * (2 * Math.PI)) / 360;
   }
 
   // an implementation of rotate(deg, cx, cy) that uses translate
   // to allow for application of multiple rotations
   R.el.rotateAround = function(degree, cx, cy) {
-    var cos = Math.cos, sin = Math.sin;
-    t = degToRad(parseInt(degree) + parseInt(this.rotate()));
+    var cos = Math.cos, sin = Math.sin,
+    root, cur_x, cur_y, r_x, r_y, x1, y1, t;
+    t = degToRad(parseInt(degree, 10));
+
+    if (this.sym_attrs && this.sym_attrs.root) {
+      // define cx and cy relative to root
+      root = this.sym_attrs.root;
+      cur_x = this.attr()['x'];
+      cur_y = this.attr()['y'];
+      r_x = root.attr()['x'];
+      r_y = root.attr()['y'];
+      jstestdriver.console.log(cur_x, cur_y, r_x, r_y);
+      cx = cx - (cur_x - r_x);
+      cy = cy - (cur_y - r_y);
+    }
+
     x1 = ((cx * cos(t)) - (cy * sin(t))) * -1;
     y1 = ((cx * sin(t)) + (cy * cos(t))) * -1;
 
     this.rotate(degree);
 
-    if (this.sym_attrs) {
+    if (this.sym_attrs && this.sym_attrs['post_apply']) {
       this.sym_attrs['post_apply']['cx'] = (x1 + cx);
       this.sym_attrs['post_apply']['cy'] = (y1 + cy);
     } else {
