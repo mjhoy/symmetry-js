@@ -1,3 +1,30 @@
 symmetry.raphael.js
 
 bringing Symmetry groups to Raphael.
+
+[ NB: very work-in-progress ]
+
+to use: 
+* requires Raphael and underscore.js
+
+(assuming a raphael 'paper' object)
+
+// create a new rect
+var r = paper.rect(100, 100, 10, 10)
+
+// create a symmetry group. takes a 'root' element (the rect),
+// a transformation function, and an integer; the function is applied to 
+// the root element n-times.
+var r1 = new SymmetryGroup(r, function() {
+  this.rotateAround(20,20, 0); // rotateAround is a raphael extension
+}, 20);
+
+// now, apply another transformation, taking the symmetry group as root
+var r2 = new SymmetryGroup(r1, function() {
+   this.translate(50, 0);
+}, 1);
+
+// and so on...
+var r3 = new SymmetryGroup(r2, function() {
+  this.translate(0, 50);
+}, 1);
