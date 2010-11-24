@@ -46,15 +46,34 @@ var SymmetryGroup = function (rootElement, transFunc, transN) {
       });
       _elements = []
     }
+    _set_sym_vars(root);
     _.times(_n, function() {
       var last = _elements[_elements.length - 1] || _root;
       c = last.clone();
+      _post_clone(last);
+      _set_sym_vars(c);
       _func.call(c);
       _elements.push(c);
     });
   }
 
+  function _post_clone(el) {
+    if (el !== _root) {
+      post = el['sym_attrs']['post_apply'];
+      cx = post['cy'] || 0;
+      cy = post['cx'] || 0;
+      el.translate( cx, cy);
+    }
+  }
 
+  function _set_sym_vars(el) {
+    el['sym_attrs'] = {};
+    var s = el['sym_attrs']
+    s['root_x'] = _root.attr()['x'];
+    s['root_y'] = _root.attr()['y'];
+    s['post_apply'] = {};
+  }
+  
   // -----------------
   // Raphael functions
   // -----------------
@@ -73,9 +92,11 @@ var SymmetryGroup = function (rootElement, transFunc, transN) {
   }
 
   function translate(dx, dy) {
-    _.each(_elements.concat(_root), function(el) {
-      el.translate(dx, dy);
-    });
+    _root.translate(dx, dy);
+    _apply();
+    //_.each(_elements.concat(_root), function(el) {
+    //  el.translate(dx, dy);
+    //});
   }
 
   function clone() {
@@ -90,6 +111,10 @@ var SymmetryGroup = function (rootElement, transFunc, transN) {
     });
     _root.remove();
   }
+  
+  function attr() {
+    return _root.attr();
+  }
 
   // Set public methods
   this.setTransform = setTransform;
@@ -100,15 +125,37 @@ var SymmetryGroup = function (rootElement, transFunc, transN) {
   this.rotate = rotate;
   this.clone = clone;
   this.remove = remove;
+  this.attr = attr;
 
   // Apply the transformation if given
   if (transFunc) {
     if (transN === undefined) { transN = 1; }
     this.setTransform(transFunc, transN);
   }
+
 };
 
 /* Raphael extensions */
-(function (Raphael) {
+(function (R) {
+  function degToRad(deg) {
+    return (deg * (2 * Math.PI)) / 360
+  }
 
+  // an implementation of rotate(deg, cx, cy) that uses translate
+  // to allow for application of multiple rotations
+  R.el.rotateAround = function(degree, cx, cy) {
+    var cos = Math.cos, sin = Math.sin;
+    t = degToRad(parseInt(degree) + parseInt(this.rotate()));
+    x1 = ((cx * cos(t)) - (cy * sin(t))) * -1;
+    y1 = ((cx * sin(t)) + (cy * cos(t))) * -1;
+
+    this.rotate(degree);
+
+    if (this.sym_attrs) {
+      this.sym_attrs['post_apply']['cx'] = (x1 + cx);
+      this.sym_attrs['post_apply']['cy'] = (y1 + cy);
+    } else {
+      this.translate((x1 + cx), (y1 + cy));
+    }
+  };
 }(Raphael));
