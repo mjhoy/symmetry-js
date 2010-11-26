@@ -11,8 +11,6 @@
   // TODO: use real method?
   function setSymAttrs(el) {
     el['sym_attrs'] = {};
-    var s = el['sym_attrs'];
-    // s['post_apply'] = {}; // don't define post-apply
   }
 
   TestCase("rotateAround", {
