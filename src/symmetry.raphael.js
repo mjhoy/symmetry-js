@@ -5,6 +5,7 @@
  * requires: raphael, underscore.js
  */
 
+
 /*
  * SymmetryGroup
  * constructor function which returns an object
@@ -39,9 +40,12 @@ var SymmetryGroup = function (rootElement, transFunc, transN) {
     _apply();
   }
 
+  function elements() {
+    return _elements;
+  }
+
   // Apply transformation function from the root element
   function _apply() {
-
     // Reset the current cloned element array
     if (_elements.length > 0) {
       _.each(_elements, function(el) {
@@ -49,11 +53,9 @@ var SymmetryGroup = function (rootElement, transFunc, transN) {
       });
       _elements = [];
     }
-    _set_sym_vars(_root);
     _.times(_n, function() {
       var last = _elements[_elements.length - 1] || _root;
       c = last.clone();
-      _post_clone(last);
       _set_sym_vars(c);
       _func.call(c);
       _elements.push(c);
@@ -74,6 +76,7 @@ var SymmetryGroup = function (rootElement, transFunc, transN) {
       var s = el['sym_attrs'];
       s['root_x'] = _root.attr()['x'];
       s['root_y'] = _root.attr()['y'];
+      s['root'] = _root;
       s['post_apply'] = {};
     }
   }
@@ -88,25 +91,20 @@ var SymmetryGroup = function (rootElement, transFunc, transN) {
     degree = parseInt(degree, 10) + parseInt(current, 10);
     _root.rotate(degree, cx, cY);
     _apply();
-   // console.log(degree);
-    //_.each(_elements.concat(_root), function(el) {
-      // capture previous rotation
-      //el.rotate(parseInt(degree, cx, cY);
-    //});
     return this;
+  }
+
+  function rotateAround(degree, cx, cy) {
+
   }
 
   function translate(dx, dy) {
     _root.translate(dx, dy);
     _apply();
-    //_.each(_elements.concat(_root), function(el) {
-    //  el.translate(dx, dy);
-    //});
   }
 
   function clone() {
-    var c = new this.constructor(_root.clone());
-    c.setTransform(_func, _n);
+    var c = new this.constructor(_root.clone(), _func, _n);
     return c;
   }
 
@@ -115,6 +113,7 @@ var SymmetryGroup = function (rootElement, transFunc, transN) {
       el.remove();
     });
     _root.remove();
+    this.removed = true;
   }
   
   function attr() {
@@ -125,17 +124,20 @@ var SymmetryGroup = function (rootElement, transFunc, transN) {
   this.setTransform = setTransform;
   this.apply = apply;
   this.root = root;
+  this.elements = elements;
 
   this.translate = translate;
   this.rotate = rotate;
   this.clone = clone;
   this.remove = remove;
   this.attr = attr;
+  this.removed = false;
 
-  // Apply the transformation if given
-  if (transFunc) {
+  if (transFunc && typeof transFunc === "function") {
     if (transN === undefined) { transN = 1; }
     this.setTransform(transFunc, transN);
+  } else {
+    throw "no transformation function given";
   }
 
 };
@@ -160,7 +162,6 @@ var SymmetryGroup = function (rootElement, transFunc, transN) {
       cur_y = this.attr()['y'];
       r_x = root.attr()['x'];
       r_y = root.attr()['y'];
-      jstestdriver.console.log(cur_x, cur_y, r_x, r_y);
       cx = cx - (cur_x - r_x);
       cy = cy - (cur_y - r_y);
     }
@@ -170,11 +171,6 @@ var SymmetryGroup = function (rootElement, transFunc, transN) {
 
     this.rotate(degree);
 
-    if (this.sym_attrs && this.sym_attrs['post_apply']) {
-      this.sym_attrs['post_apply']['cx'] = (x1 + cx);
-      this.sym_attrs['post_apply']['cy'] = (y1 + cy);
-    } else {
-      this.translate((x1 + cx), (y1 + cy));
-    }
+    this.translate((x1 + cx), (y1 + cy));
   };
 }(Raphael));
