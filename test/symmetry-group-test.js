@@ -124,6 +124,26 @@
       assert(s.removed);
     }
   });
+
+  TestCase("Nested groups", {
+    setUp: raphSetUp,
+    tearDown: raphTearDown,
+
+    "test can take a symmetry group as a root element":
+    function () {
+      var r = this.rect;
+      var s = new SymmetryGroup(r, function () {
+        this.translate(10,0);
+      }, 3);
+      // now create a symmetrygroup using the previous symmetry group
+      var s1 = new SymmetryGroup(s, function () {
+        this.translate(0, 10);
+      }, 3);
+      assertEquals(s1.root(), s);
+      assertEquals(3, s1.elements().length);
+      assertEquals("symmetrygroup", s1.elements()[0].type);
+    }
+  });
     
 }());
 
