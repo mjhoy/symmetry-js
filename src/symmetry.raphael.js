@@ -46,13 +46,7 @@ var SymmetryGroup = function (rootElement, transFunc, transN) {
 
   // Apply transformation function from the root element
   function _apply() {
-    // Reset the current cloned element array
-    if (_elements.length > 0) {
-      _.each(_elements, function(el) {
-        el.remove();
-      });
-      _elements = [];
-    }
+    _reset_elements();
     _.times(_n, function() {
       var last = _elements[_elements.length - 1] || _root;
       var c = last.clone();
@@ -62,20 +56,27 @@ var SymmetryGroup = function (rootElement, transFunc, transN) {
     });
   }
 
+  // Reset the current cloned element array
+  function _reset_elements() {
+    if (_elements.length > 0) {
+      _.each(_elements, function(el) {
+        el.remove();
+      });
+      _elements = [];
+    }
+  }
+
   function _post_clone(el) {
     post = el['sym_attrs']['post_apply'];
     cx = post['cy'] || 0;
     cy = post['cx'] || 0;
     el.translate( cx, cy);
-    console.log(cx, cy);
   }
 
   function _set_sym_vars(el) {
     if (el['sym_attrs'] === undefined) {
       el['sym_attrs'] = {};
       var s = el['sym_attrs'];
-      s['root_x'] = _root.attr()['x'];
-      s['root_y'] = _root.attr()['y'];
       s['root'] = _root;
       s['post_apply'] = {};
     }
