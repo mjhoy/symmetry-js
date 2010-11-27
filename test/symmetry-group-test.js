@@ -142,6 +142,28 @@
       assertEquals(s1.root(), s);
       assertEquals(3, s1.elements().length);
       assertEquals("symmetrygroup", s1.elements()[0].type);
+    },
+
+    "test applies nested transformations":
+    function () {
+      var r = this.rect;
+      var s = new SymmetryGroup(r, function () {
+        this.translate(10,0);
+      }, 3);
+      // now create a symmetrygroup using the previous symmetry group
+      var s1 = new SymmetryGroup(s, function () {
+        this.translate(0, 10);
+      }, 3);
+      var s1g0 = s1.root();
+      var s1g1 = s1.elements()[0];
+      var s1g2 = s1.elements()[1];
+      var s1g3 = s1.elements()[2];
+
+      // assert that nested groups are transformed
+      assertEquals(10, s1g0.attr()['y']);
+      assertEquals(20, s1g1.attr()['y']);
+      assertEquals(30, s1g2.attr()['y']);
+      assertEquals(40, s1g3.attr()['y']);
     }
   });
     
