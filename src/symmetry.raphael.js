@@ -55,7 +55,7 @@ var SymmetryGroup = function (rootElement, transFunc, transN) {
     }
     _.times(_n, function() {
       var last = _elements[_elements.length - 1] || _root;
-      c = last.clone();
+      var c = last.clone();
       _set_sym_vars(c);
       _func.call(c);
       _elements.push(c);

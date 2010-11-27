@@ -11,12 +11,14 @@
     this.rect = paper.rect(10, 10, 10, 10);
   }
 
+  function raphTearDown() {
+    paper.clear();
+  }
+
 
   TestCase("Basic creation", {
     setUp: raphSetUp,
-    tearDown: function () {
-      paper.clear();
-    },
+    tearDown: raphTearDown,
 
     "test without a transformation should raise error":
     function () {
@@ -41,9 +43,7 @@
 
   TestCase("Translation", {
     setUp: raphSetUp,
-    tearDown: function () {
-      paper.clear();
-    },
+    tearDown: raphTearDown,
 
     "test with one transformation":
     function() {
@@ -87,9 +87,7 @@
 
   TestCase("Raphael functions", {
     setUp: raphSetUp,
-    tearDown: function () {
-      paper.clear();
-    },
+    tearDown: raphTearDown,
 
     "test clone() clones the symmetry group": function () {
       var r = this.rect;
