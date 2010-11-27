@@ -101,6 +101,68 @@
       assertEquals(180, r.rotate());
       assertEquals((ox + 20), nx);
       assertEquals(oy, ny);
+    },
+
+    "test relative to root rotation":
+    function () {
+      var paper = this.paper,
+      root, r, ox, oy, nx, ny;
+      root = paper.rect(10, 10, 10, 10);
+      r = paper.rect(10, 10, 10, 10);
+      ox = r.attr()['x'];
+      oy = r.attr()['y'];
+
+      setSymAttrs(r);
+      r['sym_attrs']['root'] = root;
+
+      // 90 degree rotation of root
+      root.rotate(90);
+
+      // at 90deg, x is +1, y is -1 (w Raphael axis),
+      // relative to the root, BUT at rotation 90
+      // x is +1, y is +1 
+      r.rotateAround(90, 10, 0);
+
+      nx = r.attr()['x'];
+      ny = r.attr()['y'];
+      assertEquals(90, r.rotate());
+      assertEquals((ox + 10), nx);
+      assertEquals((oy + 10), ny);
+    },
+
+    "test sets incremental rotation in symmetry group":
+    function () {
+      var paper = this.paper,
+      root, r, ox, oy, nx, ny;
+      root = paper.rect(10, 10, 10, 10);
+      root = paper.rect(10, 10, 10, 10);
+      r = new SymmetryGroup(root, function () {
+        this.rotateAround(90, 20, 0);
+      }, 3);
+
+      assertEquals(0, r.rotate());
+      assertEquals(90, r.elements()[0].rotate());
+      assertEquals(180, r.elements()[1].rotate());
+      assertEquals(270, r.elements()[2].rotate());
+    },
+
+    "test sets incremental rotation in nested symmetry group":
+    function () {
+      var paper = this.paper,
+      root, r, r2, ox, oy, nx, ny;
+      root = paper.rect(10, 10, 10, 10);
+      root = paper.rect(10, 10, 10, 10);
+      r = new SymmetryGroup(root, function () {
+        this.rotateAround(90, 20, 0);
+      }, 3);
+      r2 = new SymmetryGroup(r, function () {
+        this.rotateAround(90, 50, 0);
+      }, 3);
+
+      assertEquals(0, r2.rotate());
+      assertEquals(90, r2.elements()[0].rotate());
+      assertEquals(180, r2.elements()[1].rotate());
+      assertEquals(270, r2.elements()[2].rotate());
     }
   });
 
