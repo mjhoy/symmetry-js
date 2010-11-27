@@ -95,6 +95,7 @@
         this.translate(10,0);
       }, 3);
       var c = s.clone();
+      assertEquals("symmetrygroup", c.type);
       assertEquals(10, c.root().attr()['x']);
       assertEquals(s.elements().length, c.elements().length);
       // move the clone 10

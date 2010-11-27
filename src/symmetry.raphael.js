@@ -132,6 +132,7 @@ var SymmetryGroup = function (rootElement, transFunc, transN) {
   this.remove = remove;
   this.attr = attr;
   this.removed = false;
+  this.type = "symmetrygroup";
 
   if (transFunc && typeof transFunc === "function") {
     if (transN === undefined) { transN = 1; }
