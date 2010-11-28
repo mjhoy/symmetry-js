@@ -38,11 +38,10 @@ E.g.:
 
     var r = paper.rect(50, 50, 10, 10)
 
-
 **create a symmetry group** from the rect.
 
     var r1 = new SymmetryGroup(r, function() {
-      this.translate(10,10,); // rotateAround is a raphael extension
+      this.translate(10,10,);
     }, 5);
 
 This creates a series of squares in a diagonal line (each one
@@ -51,9 +50,9 @@ square.)
 
 **create a nested symmetry** from the diagonal series of squares:
 
-   var r2 = new SymmetryGroup(r1, function() {
+    var r2 = new SymmetryGroup(r1, function() {
       this.translate(20, 0);
-   }, 5);
+    }, 5);
    
 Note that `r1` is passed as the root element above. This repeats the
 _series_ (symmetry group) of squares, created as r1, 20 pixels apart
