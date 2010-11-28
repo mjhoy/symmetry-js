@@ -85,6 +85,24 @@
     }
   });
 
+  TestCase("Scale", {
+    setUp: raphSetUp,
+    tearDown: raphTearDown,
+
+    "test should scale the root":
+    function () {
+      var r = this.rect;
+      var s = new SymmetryGroup(r, function () {
+        this.translate(10,0);
+      }, 3);
+      s.scale(2, 2);
+      assertEquals(2, s.root().scale()['x']);
+      assertEquals(2, s.root().scale()['y']);
+      assertEquals(2, s.scale()['y']);
+      assertEquals(r.scale(), s.scale());
+    }
+  });
+
   TestCase("Raphael functions", {
     setUp: raphSetUp,
     tearDown: raphTearDown,

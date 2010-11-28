@@ -22,6 +22,7 @@ var SymmetryGroup = (function (Raphael) {
     var t = degToRad(deg);
   }
 
+
   // an implementation of rotate(deg, cx, cy) that uses translate
   // to allow for additive multiple rotations
   //
@@ -160,6 +161,12 @@ var SymmetryGroup = (function (Raphael) {
       _apply();
     }
 
+    function scale(dx, dy) {
+      var out = _root.scale(dx, dy);
+      _apply();
+      return out;
+    }
+
     function clone() {
       var c = new this.constructor(_root.clone(), _func, _n);
       return c;
@@ -184,6 +191,7 @@ var SymmetryGroup = (function (Raphael) {
     this.elements = elements;
 
     this.translate = translate;
+    this.scale = scale;
     this.rotate = rotate;
     this.rotateAround = rotateAround;
     this.clone = clone;
