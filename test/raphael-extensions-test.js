@@ -1,5 +1,13 @@
 (function () {
 
+  // helper functions
+  function getX(el) {
+    return el.attr()['x'];
+  }
+
+  function getY(el) {
+    return el.attr()['y'];
+  }
   // set up the DOM with a raphael div
   function raphSetUp () {
     /*:DOC += <div id="raphael"></div>
@@ -33,11 +41,11 @@
       var paper = this.paper, 
       r, ox, oy, nx, ny;
       r = paper.rect(10, 10, 10, 10);
-      ox = r.attr()['x'];
-      oy = r.attr()['y'];
+      ox = getX(r);
+      oy = getY(r);
       r.rotateAround(10, 0, 0);
-      nx = r.attr()['x'];
-      ny = r.attr()['y'];
+      nx = getX(r);
+      ny = getY(r);
       assertEquals(ox, nx);
       assertEquals(oy, ny);
     },
@@ -46,13 +54,13 @@
       var paper = this.paper,
       r, ox, oy, nx, ny;
       r = paper.rect(10, 10, 10, 10);
-      ox = r.attr()['x'];
-      oy = r.attr()['y'];
+      ox = getX(r);
+      oy = getY(r);
       
       // at 90deg, x is +1, y is -1 (w Raphael axis)
       r.rotateAround(90, 10, 0);
-      nx = r.attr()['x'];
-      ny = r.attr()['y'];
+      nx = getX(r);
+      ny = getY(r);
       assertEquals((ox + 10), nx);
       assertEquals((oy - 10), ny);
     },
@@ -61,8 +69,8 @@
       var paper = this.paper,
       r, ox, oy, nx, ny;
       r = paper.rect(10, 10, 10, 10);
-      ox = r.attr()['x'];
-      oy = r.attr()['y'];
+      ox = getX(r);
+      oy = getY(r);
       
       // at 90deg, x is +1, y is -1 (w Raphael axis)
       r.rotateAround(90, 10, 0);
@@ -70,8 +78,8 @@
       // another 90deg rotation around new point, x is +2, y is -2 (total),
       // rotation is 180 total
       r.rotateAround(90, 10, 0);
-      nx = r.attr()['x'];
-      ny = r.attr()['y'];
+      nx = getX(r);
+      ny = getY(r);
       assertEquals(180, r.rotate());
       assertEquals((ox + 20), nx);
       assertEquals((oy - 20), ny);
@@ -83,8 +91,8 @@
       root, r, ox, oy, nx, ny;
       root = paper.rect(10, 10, 10, 10);
       r = paper.rect(10, 10, 10, 10);
-      ox = r.attr()['x'];
-      oy = r.attr()['y'];
+      ox = getX(r);
+      oy = getY(r);
 
       setSymAttrs(r);
       r['sym_attrs']['root'] = root;
@@ -96,8 +104,8 @@
       // at 180deg, x is +2, y is 0 (w Raphael axis),
       // relative to the root
       r.rotateAround(90, 10, 0);
-      nx = r.attr()['x'];
-      ny = r.attr()['y'];
+      nx = getX(r);
+      ny = getY(r);
       assertEquals(180, r.rotate());
       assertEquals((ox + 20), nx);
       assertEquals(oy, ny);
@@ -109,8 +117,8 @@
       root, r, ox, oy, nx, ny;
       root = paper.rect(10, 10, 10, 10);
       r = paper.rect(10, 10, 10, 10);
-      ox = r.attr()['x'];
-      oy = r.attr()['y'];
+      ox = getX(r);
+      oy = getY(r);
 
       setSymAttrs(r);
       r['sym_attrs']['root'] = root;
@@ -123,8 +131,8 @@
       // x is +1, y is +1 
       r.rotateAround(90, 10, 0);
 
-      nx = r.attr()['x'];
-      ny = r.attr()['y'];
+      nx = getX(r);
+      ny = getY(r);
       assertEquals(90, r.rotate());
       assertEquals((ox + 10), nx);
       assertEquals((oy + 10), ny);

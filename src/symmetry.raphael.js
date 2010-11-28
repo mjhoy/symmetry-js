@@ -19,6 +19,24 @@ var SymmetryGroup = (function (Raphael) {
     return (deg * (2 * Math.PI)) / 360;
   }
 
+  // internal x and y tracking. Very hack-y, but I'm not
+  // sure how to get the X/Y values for things like paths.
+  function getX(el) {
+    return el.attr()['x'];
+  }
+
+  function getY(el) {
+    return el.attr()['y'];
+  }
+
+  function setXY(el, x, y) {
+
+  }
+
+  function addXY(el, x, y) {
+    setXY(el, x + getX(el), y + getY(el));
+  }
+
 
   // an implementation of rotate(deg, cx, cy) that uses translate
   // to allow for additive multiple rotations
@@ -41,12 +59,12 @@ var SymmetryGroup = (function (Raphael) {
       rootRotate = root.rotate();
 
       // find the current x,y of this element
-      cur_x = this.attr()['x'];
-      cur_y = this.attr()['y'];
+      cur_x = getX(this);
+      cur_y = getY(this);
 
       // find the root x, y
-      r_x = root.attr()['x'];
-      r_y = root.attr()['y'];
+      r_x = getX(root);
+      r_y = getY(root);
 
       // if the root (pivot) element is already rotated,
       // the (cx) and (cy) parameters should be rotated along with.
