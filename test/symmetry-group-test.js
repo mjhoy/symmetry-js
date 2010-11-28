@@ -1,6 +1,9 @@
 (function () {
 
   // helper functions
+  // TODO: for some reason
+  // getBBox() doesn't work
+  // in the tests. hmm...
   function getX(el) {
     return el.attr()['x'];
   }
@@ -33,7 +36,7 @@
     function () {
       var r = this.rect;
       assertException(function() {
-        s = new SymmetryGroup(r);
+        var s = new SymmetryGroup(r);
       });
     },
 
@@ -62,7 +65,7 @@
       });
       assertEquals(1, s.elements().length);
 
-      el = _.last(s.elements()); // get the last of the elements array
+      var el = _.last(s.elements()); // get the last of the elements array
       assertEquals(20, getX(el)); // element has moved 10
     },
 

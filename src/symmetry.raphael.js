@@ -19,24 +19,14 @@ var SymmetryGroup = (function (Raphael) {
     return (deg * (2 * Math.PI)) / 360;
   }
 
-  // internal x and y tracking. Very hack-y, but I'm not
-  // sure how to get the X/Y values for things like paths.
+  // helper functions to get an element's x or y
   function getX(el) {
-    return el.attr()['x'];
+    return el.getBBox()['x'];
   }
 
   function getY(el) {
-    return el.attr()['y'];
+    return el.getBBox()['y'];
   }
-
-  function setXY(el, x, y) {
-
-  }
-
-  function addXY(el, x, y) {
-    setXY(el, x + getX(el), y + getY(el));
-  }
-
 
   // an implementation of rotate(deg, cx, cy) that uses translate
   // to allow for additive multiple rotations
@@ -94,7 +84,7 @@ var SymmetryGroup = (function (Raphael) {
   // -----
   // extend Raphael
   Raphael.el.rotateAround = rotateAround;
-  
+
   // ------
   // the constructor function
   return function(rootElement, transFunc, transN) {
@@ -199,6 +189,10 @@ var SymmetryGroup = (function (Raphael) {
       return _root.attr();
     }
 
+    function getBBox() {
+      return _root.getBBox(); // TODO... actually make this right? (just used for x/y currently)
+    }
+
     // Set public methods
     this.setTransform = setTransform;
     this.apply = apply;
@@ -212,6 +206,7 @@ var SymmetryGroup = (function (Raphael) {
     this.clone = clone;
     this.remove = remove;
     this.attr = attr;
+    this.getBBox = getBBox;
     this.removed = false;
     this.type = "symmetrygroup";
 
