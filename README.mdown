@@ -1,0 +1,79 @@
+# symmetry.raphael.js #
+
+bringing symmetry groups to Raphael.
+
+_[ NB: very work-in-progress ]_
+
+_requires Raphael and underscore.js_
+
+## Symmetry Groups ##
+
+Peter S. Stevens, in _Handbook of Regular Patterns_, defines a "symmetry
+group" thus:
+
+> A symmetry group is a collection of symmetry operations that together
+> share three characteristics: (1) each operation can be followed by
+> a second operation to produce a third operation that itself is a
+> member of the group, (2) each operation can be undone by another
+> operation, that is to say, for each operation there exists an inverse
+> operation, and (3) the position of the pattern after an operation
+> can be the same as before the operation, that is, there exists an
+> identity operation which leaves the figure unchanged.
+
+Whether what I'm calling "symmetry groups" here is at all accurate, I'm 
+not sure. Anyway, it was the above book which prompted me to write this,
+and try to allow for a programmatical way to perform symmetry operations in
+Raphael.
+
+### Usage: ###
+
+The `SymmetryGroup` constructor function takes a root element, a
+transformation function, and an integer -- how many times the
+transformation is applied. The root element can either be a Raphael
+object (like a rect, or a circle) or another SymmetryGroup.
+
+E.g.:
+
+**create a new rect** (10 pixels square at point 50, 50)
+
+    var r = paper.rect(50, 50, 10, 10)
+
+
+**create a symmetry group** from the rect.
+
+    var r1 = new SymmetryGroup(r, function() {
+      this.translate(10,10,); // rotateAround is a raphael extension
+    }, 5);
+
+This creates a series of squares in a diagonal line (each one
+moving 10 on the x-axis and 10 on the y-axis from the previous
+square.)
+
+**create a nested symmetry** from the diagonal series of squares:
+
+   var r2 = new SymmetryGroup(r1, function() {
+      this.translate(20, 0);
+   }, 5);
+   
+Note that `r1` is passed as the root element above. This repeats the
+_series_ (symmetry group) of squares, created as r1, 20 pixels apart
+along the x-axis.
+
+## Raphael extensions ##
+
+### rotateAround(degree, cx, cy) ###
+
+This method is provided on all Raphael and SymmetryGroup objects
+mostly to allow for additive rotations with a 'pivot' point defined.
+For a Raphael object this is not much different than rotate(degree, x, y)
+except that the rotation is additive and `cx` and `cy` are _relative_
+to the Raphael object.
+
+Its real use is for symmetry groups. A symmetry group created as such:
+
+    var s = new SymmetryGroup(theRect, function() {
+      this.rotateAround(90, 20, 0);
+    }, 3)
+   
+will create 3 more elements, each rotated an additional 90 degrees
+around a point 20,0 relative to the root (`theRect`).
