@@ -12,7 +12,7 @@
  * that wraps a set of raphael elements, and also
  * allows for transformations to be additively applied
  */
-var SymmetryGroup = (function (Raphael) {
+var symmetryGroup = (function (Raphael) {
   
   // helper function
   function degToRad(deg) {
@@ -173,7 +173,7 @@ var SymmetryGroup = (function (Raphael) {
     }
 
     function clone() {
-      var c = new this.constructor(_root.clone(), _func, _n);
+      var c = symmetryGroup(_root.clone(), _func, _n);
       return c;
     }
 
@@ -193,29 +193,31 @@ var SymmetryGroup = (function (Raphael) {
       return _root.getBBox(); // TODO... actually make this right? (just used for x/y currently)
     }
 
-    // Set public methods
-    this.setTransform = setTransform;
-    this.apply = apply;
-    this.root = root;
-    this.elements = elements;
-
-    this.translate = translate;
-    this.scale = scale;
-    this.rotate = rotate;
-    this.rotateAround = rotateAround;
-    this.clone = clone;
-    this.remove = remove;
-    this.attr = attr;
-    this.getBBox = getBBox;
-    this.removed = false;
-    this.type = "symmetrygroup";
-
     if (transFunc && typeof transFunc === "function") {
       if (transN === undefined) { transN = 1; }
-      this.setTransform(transFunc, transN);
+      setTransform(transFunc, transN);
     } else {
       throw "no transformation function given";
     }
+
+    // Set public methods
+    return {
+      setTransform: setTransform,
+      apply: apply,
+      root: root,
+      elements: elements,
+
+      translate: translate,
+      scale: scale,
+      rotate: rotate,
+      rotateAround: rotateAround,
+      clone: clone,
+      remove: remove,
+      attr: attr,
+      getBBox: getBBox,
+      removed: false,
+      type: "symmetrygroup"
+    };
 
   };
 

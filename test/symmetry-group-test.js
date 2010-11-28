@@ -36,14 +36,14 @@
     function () {
       var r = this.rect;
       assertException(function() {
-        var s = new SymmetryGroup(r);
+        var s = symmetryGroup(r);
       });
     },
 
     "test should set root": function () {
       var r = this.rect;
       r['foo'] = "bar"; // note below..
-      var s = new SymmetryGroup(r, function() {
+      var s = symmetryGroup(r, function() {
         this.translate(10, 0);
       });
       // For some reason asserting equivalance between
@@ -60,7 +60,7 @@
     "test with one transformation":
     function() {
       var r = this.rect;
-      var s = new SymmetryGroup(r, function() {
+      var s = symmetryGroup(r, function() {
         this.translate(10, 0);
       });
       assertEquals(1, s.elements().length);
@@ -72,7 +72,7 @@
     "test increment with multiple transformations":
     function () {
       var r = this.rect;
-      var s = new SymmetryGroup(r, function () {
+      var s = symmetryGroup(r, function () {
         this.translate(10,0);
       }, 3);
       assertEquals(3, s.elements().length);
@@ -86,7 +86,7 @@
     "test translates all elements":
     function () {
       var r = this.rect;
-      var s = new SymmetryGroup(r, function () {
+      var s = symmetryGroup(r, function () {
         this.translate(10,0);
       }, 3);
       s.translate(10, 0);
@@ -104,7 +104,7 @@
     "test should scale the root":
     function () {
       var r = this.rect;
-      var s = new SymmetryGroup(r, function () {
+      var s = symmetryGroup(r, function () {
         this.translate(10,0);
       }, 3);
       s.scale(2, 2);
@@ -121,7 +121,7 @@
 
     "test clone() clones the symmetry group": function () {
       var r = this.rect;
-      var s = new SymmetryGroup(r, function () {
+      var s = symmetryGroup(r, function () {
         this.translate(10,0);
       }, 3);
       var c = s.clone();
@@ -136,7 +136,7 @@
 
     "test attr() returns the root element's attr()": function () {
       var r = this.rect;
-      var s = new SymmetryGroup(r, function () {
+      var s = symmetryGroup(r, function () {
         this.translate(10,0);
       }, 3);
       assertEquals(s.attr(), r.attr());
@@ -144,7 +144,7 @@
 
     "test remove() removes the elements": function () {
       var r = this.rect;
-      var s = new SymmetryGroup(r, function () {
+      var s = symmetryGroup(r, function () {
         this.translate(10,0);
       }, 3);
       assertFalse(s.removed);
@@ -162,11 +162,11 @@
     "test can take a symmetry group as a root element":
     function () {
       var r = this.rect;
-      var s = new SymmetryGroup(r, function () {
+      var s = symmetryGroup(r, function () {
         this.translate(10,0);
       }, 3);
       // now create a symmetrygroup using the previous symmetry group
-      var s1 = new SymmetryGroup(s, function () {
+      var s1 = symmetryGroup(s, function () {
         this.translate(0, 10);
       }, 3);
       assertEquals(s1.root(), s);
@@ -177,11 +177,11 @@
     "test applies nested transformations":
     function () {
       var r = this.rect;
-      var s = new SymmetryGroup(r, function () {
+      var s = symmetryGroup(r, function () {
         this.translate(10,0);
       }, 3);
       // now create a symmetrygroup using the previous symmetry group
-      var s1 = new SymmetryGroup(s, function () {
+      var s1 = symmetryGroup(s, function () {
         this.translate(0, 10);
       }, 3);
       var s1g0 = s1.root();

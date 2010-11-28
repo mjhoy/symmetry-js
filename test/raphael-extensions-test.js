@@ -144,7 +144,7 @@
       root, r, ox, oy, nx, ny;
       root = paper.rect(10, 10, 10, 10);
       root = paper.rect(10, 10, 10, 10);
-      r = new SymmetryGroup(root, function () {
+      r = symmetryGroup(root, function () {
         this.rotateAround(90, 20, 0);
       }, 3);
 
@@ -160,10 +160,10 @@
       root, r, r2, ox, oy, nx, ny;
       root = paper.rect(10, 10, 10, 10);
       root = paper.rect(10, 10, 10, 10);
-      r = new SymmetryGroup(root, function () {
+      r = symmetryGroup(root, function () {
         this.rotateAround(90, 20, 0);
       }, 3);
-      r2 = new SymmetryGroup(r, function () {
+      r2 = symmetryGroup(r, function () {
         this.rotateAround(90, 50, 0);
       }, 3);
 
