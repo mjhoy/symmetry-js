@@ -135,20 +135,12 @@ var SymmetryGroup = (function (Raphael) {
       }
     }
 
-    function _post_clone(el) {
-      post = el['sym_attrs']['post_apply'];
-      cx = post['cy'] || 0;
-      cy = post['cx'] || 0;
-      el.translate( cx, cy);
-    }
-
     function _set_sym_vars(el) {
       if (el['sym_attrs'] === undefined) {
         el['sym_attrs'] = {};
       }
       var s = el['sym_attrs'];
       s['root'] = _root;
-      s['post_apply'] = {};
     }
     
     // -----------------
