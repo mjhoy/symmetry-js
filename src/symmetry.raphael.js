@@ -14,12 +14,9 @@
  */
 var SymmetryGroup = (function (Raphael) {
   
+  // helper function
   function degToRad(deg) {
     return (deg * (2 * Math.PI)) / 360;
-  }
-
-  function rotateTest(cx, cy, deg) {
-    var t = degToRad(deg);
   }
 
 
