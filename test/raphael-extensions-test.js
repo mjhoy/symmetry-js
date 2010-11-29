@@ -15,14 +15,44 @@
     this.paper = Raphael('raphael', 600, 600);
   }
 
+  function raphTearDown () {
+    this.paper.clear();
+  }
+
   // helper function
   // TODO: use real method?
   function setSymAttrs(el) {
     el['sym_attrs'] = {};
   }
 
+  TestCase("rotate", {
+    setUp: raphSetUp,
+    tearDown: raphTearDown,
+
+    "test acts normally with normal raphael object":
+    function () {
+      var r = this.paper.rect(10, 10, 10, 10);
+      r.translate(10, 10);
+      assertEquals(20, getX(r));
+      assertEquals(20, getY(r));
+    },
+
+    "test when root is defined, translates in reference to root rotation":
+    function () {
+      var r = this.paper.rect(10, 10, 10, 10);
+      var root = this.paper.rect(10, 10, 10, 10);
+      root.rotate(90); // set root rotation
+      r.sym_attrs = {};
+      r.sym_attrs['root'] = root;
+      r.translate(10, 10);
+      assertEquals(0, getX(r));
+      assertEquals(20, getY(r));
+    }
+  });
+
   TestCase("rotateAround", {
     setUp: raphSetUp,
+    tearDown: raphTearDown,
 
     "test is defined": function () {
       var paper = this.paper, r;
@@ -129,7 +159,7 @@
       // at 90deg, x is +1, y is -1 (w Raphael axis),
       // relative to the root, BUT at rotation 90
       // x is +1, y is +1 
-      r.rotateAround(90, 10, 0);
+      r.rotateAround(90, 0, 10);
 
       nx = getX(r);
       ny = getY(r);

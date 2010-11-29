@@ -28,6 +28,11 @@ var symmetryGroup = (function (Raphael) {
     return el.getBBox()['y'];
   }
 
+  // -----
+  // extend Raphael
+
+  // rotateAround(deg, x, y)
+  //
   // an implementation of rotate(deg, cx, cy) that uses translate
   // to allow for additive multiple rotations
   //
@@ -81,12 +86,43 @@ var symmetryGroup = (function (Raphael) {
     this.translate((x1 + cx), (y1 + cy));
   }
 
-  // -----
-  // extend Raphael
   Raphael.el.rotateAround = rotateAround;
 
+  // r_translate(x, y)
+  //
+  // A replacement translation function for Raphael elements
+  // if a root property is defined (through the sym_attrs property)
+  // then the translation is rotated accordingly.
+  //
+  // e.g., if the root is rotated 90 degrees, and the translation is
+  // (10, 10): Imagine a line from (0, 0) to (10, 10), which is rotated
+  // 90 degrees. Where does it now point? The rotated translation is
+  // (-10, 10).
+  //
+  // This becomes Raphael's translate() function.
+  //
+  // The old translation function (which is still called) can be
+  // reached at _oldTranslate(x, y).
+  function r_translate(x, y) {
+    if (this.sym_attrs && this.sym_attrs.root && this.sym_attrs.root.rotate()) {
+      var cos = Math.cos, sin = Math.sin, root = this.sym_attrs.root,
+      rootRotation, cx, cy;
+      rootRotation = degToRad(root.rotate());
+
+      // Rotate x, y
+      cx = (x * cos(rootRotation)) + (-1 * y * sin(rootRotation));
+      cy = (y * cos(rootRotation)) + (x * sin(rootRotation));
+      x = cx;
+      y = cy;
+    }
+    return this._oldTranslate(x, y);
+  }
+  Raphael.el._oldTranslate = Raphael.el.translate;
+  Raphael.el.translate = r_translate;
+
+
   // ------
-  // the constructor function
+  // the symmetryGroup function
   return function(rootElement, transFunc, transN) {
 
     var _root = rootElement;
