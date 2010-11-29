@@ -27,10 +27,12 @@ Raphael.
 
 ### Usage: ###
 
-The `SymmetryGroup` constructor function takes a root element, a
+The `symmetryGroup` function takes a root element, a
 transformation function, and an integer -- how many times the
-transformation is applied. The root element can either be a Raphael
-object (like a rect, or a circle) or another SymmetryGroup.
+transformation is applied, and returns an element that acts
+much like a normal Raphael element (its `type` property is
+`"symmetrygroup"`.) The root element can either be a Raphael
+object (like a rect, or a circle) or another symmetryGroup.
 
 E.g.:
 
@@ -40,7 +42,7 @@ E.g.:
 
 **create a symmetry group** from the rect.
 
-    var r1 = new SymmetryGroup(r, function() {
+    var r1 = symmetryGroup(r, function() {
       this.translate(10,10,);
     }, 5);
 
@@ -50,7 +52,7 @@ square.)
 
 **create a nested symmetry** from the diagonal series of squares:
 
-    var r2 = new SymmetryGroup(r1, function() {
+    var r2 = symmetryGroup(r1, function() {
       this.translate(20, 0);
     }, 5);
    
@@ -70,7 +72,7 @@ to the Raphael object.
 
 Its real use is for symmetry groups. A symmetry group created as such:
 
-    var s = new SymmetryGroup(theRect, function() {
+    var s = symmetryGroup(theRect, function() {
       this.rotateAround(90, 20, 0);
     }, 3)
    
