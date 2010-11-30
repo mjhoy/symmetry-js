@@ -168,15 +168,15 @@
       assertEquals((oy + 10), ny);
     },
 
-    "test sets incremental rotation in symmetry group":
+    "test sets incremental rotation in iteration":
     function () {
       var paper = this.paper,
       root, r, ox, oy, nx, ny;
       root = paper.rect(10, 10, 10, 10);
       root = paper.rect(10, 10, 10, 10);
-      r = symmetryGroup(root, function () {
+      r = root.iterate(3, function () {
         this.rotateAround(90, 20, 0);
-      }, 3);
+      });
 
       assertEquals(0, r.rotate());
       assertEquals(90, r.elements()[0].rotate());
@@ -184,18 +184,18 @@
       assertEquals(270, r.elements()[2].rotate());
     },
 
-    "test sets incremental rotation in nested symmetry group":
+    "test sets incremental rotation in nested iteration":
     function () {
       var paper = this.paper,
       root, r, r2, ox, oy, nx, ny;
       root = paper.rect(10, 10, 10, 10);
       root = paper.rect(10, 10, 10, 10);
-      r = symmetryGroup(root, function () {
+      r = root.iterate(3, function () {
         this.rotateAround(90, 20, 0);
-      }, 3);
-      r2 = symmetryGroup(r, function () {
+      });
+      r2 = r.iterate(3, function () {
         this.rotateAround(90, 50, 0);
-      }, 3);
+      });
 
       assertEquals(0, r2.rotate());
       assertEquals(90, r2.elements()[0].rotate());

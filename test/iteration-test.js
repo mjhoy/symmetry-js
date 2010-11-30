@@ -36,14 +36,14 @@
     function () {
       var r = this.rect;
       assertException(function() {
-        var s = symmetryGroup(r);
+        var s = r.iterate();
       });
     },
 
     "test should set root": function () {
       var r = this.rect;
       r['foo'] = "bar"; // note below..
-      var s = symmetryGroup(r, function() {
+      var s = r.iterate(function() {
         this.translate(10, 0);
       });
       // For some reason asserting equivalance between
@@ -60,7 +60,7 @@
     "test with one transformation":
     function() {
       var r = this.rect;
-      var s = symmetryGroup(r, function() {
+      var s = r.iterate(function() {
         this.translate(10, 0);
       });
       assertEquals(1, s.elements().length);
@@ -72,9 +72,9 @@
     "test increment with multiple transformations":
     function () {
       var r = this.rect;
-      var s = symmetryGroup(r, function () {
+      var s = r.iterate(3, function () {
         this.translate(10,0);
-      }, 3);
+      });
       assertEquals(3, s.elements().length);
       // translation should increment
       assertEquals(10, getX(s.root()));
@@ -86,9 +86,9 @@
     "test translates all elements":
     function () {
       var r = this.rect;
-      var s = symmetryGroup(r, function () {
+      var s = r.iterate(3, function () {
         this.translate(10,0);
-      }, 3);
+      });
       s.translate(10, 0);
       assertEquals(20, getX(s.root()));
       assertEquals(30, getX(s.elements()[0]));
@@ -104,9 +104,9 @@
     "test should scale the root":
     function () {
       var r = this.rect;
-      var s = symmetryGroup(r, function () {
+      var s = r.iterate(3, function () {
         this.translate(10,0);
-      }, 3);
+      });
       s.scale(2, 2);
       assertEquals(2, s.root().scale()['x']);
       assertEquals(2, s.root().scale()['y']);
@@ -119,13 +119,13 @@
     setUp: raphSetUp,
     tearDown: raphTearDown,
 
-    "test clone() clones the symmetry group": function () {
+    "test clone() clones the iteration": function () {
       var r = this.rect;
-      var s = symmetryGroup(r, function () {
+      var s = r.iterate(3, function () {
         this.translate(10,0);
-      }, 3);
+      });
       var c = s.clone();
-      assertEquals("symmetrygroup", c.type);
+      assertEquals("iteration", c.type);
       assertEquals(10, getX(c.root()));
       assertEquals(s.elements().length, c.elements().length);
       // move the clone 10
@@ -136,17 +136,17 @@
 
     "test attr() returns the root element's attr()": function () {
       var r = this.rect;
-      var s = symmetryGroup(r, function () {
+      var s = r.iterate(3, function () {
         this.translate(10,0);
-      }, 3);
+      });
       assertEquals(s.attr(), r.attr());
     },
 
     "test remove() removes the elements": function () {
       var r = this.rect;
-      var s = symmetryGroup(r, function () {
+      var s = r.iterate(3, function () {
         this.translate(10,0);
-      }, 3);
+      });
       assertFalse(s.removed);
       s.remove();
       assert(r.removed);
@@ -159,31 +159,31 @@
     setUp: raphSetUp,
     tearDown: raphTearDown,
 
-    "test can take a symmetry group as a root element":
+    "test can take an iteration as a root element":
     function () {
       var r = this.rect;
-      var s = symmetryGroup(r, function () {
+      var s = r.iterate(3, function () {
         this.translate(10,0);
-      }, 3);
-      // now create a symmetrygroup using the previous symmetry group
-      var s1 = symmetryGroup(s, function () {
+      });
+      // now create an iteration using the previous iteration
+      var s1 = s.iterate(3, function () {
         this.translate(0, 10);
-      }, 3);
+      });
       assertEquals(s1.root(), s);
       assertEquals(3, s1.elements().length);
-      assertEquals("symmetrygroup", s1.elements()[0].type);
+      assertEquals("iteration", s1.elements()[0].type);
     },
 
     "test applies nested transformations":
     function () {
       var r = this.rect;
-      var s = symmetryGroup(r, function () {
+      var s = r.iterate(3, function () {
         this.translate(10,0);
-      }, 3);
-      // now create a symmetrygroup using the previous symmetry group
-      var s1 = symmetryGroup(s, function () {
+      });
+      // now create an iteration using the previous iteration
+      var s1 = s.iterate(3, function () {
         this.translate(0, 10);
-      }, 3);
+      });
       var s1g0 = s1.root();
       var s1g1 = s1.elements()[0];
       var s1g2 = s1.elements()[1];
