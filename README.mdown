@@ -1,6 +1,6 @@
 # symmetry.raphael.js #
 
-bringing symmetry groups to Raphael.
+bringing symmetry to Raphael.
 
 _[ NB: very work-in-progress ]_
 
@@ -27,12 +27,10 @@ Raphael.
 
 ### Usage: ###
 
-The `symmetryGroup` function takes a root element, a
-transformation function, and an integer -- how many times the
-transformation is applied, and returns an element that acts
-much like a normal Raphael element (its `type` property is
-`"symmetrygroup"`.) The root element can either be a Raphael
-object (like a rect, or a circle) or another symmetryGroup.
+symmetry.raphael.js adds a new method `iterate` to Raphael elements, which
+takes an (optional) integer -- how many times the iteration is performed --
+and a transformation function, which serves as the iteration procedure to
+repeate.
 
 E.g.:
 
@@ -40,41 +38,45 @@ E.g.:
 
     var r = paper.rect(50, 50, 10, 10)
 
-**create a symmetry group** from the rect.
+**create an iteration** from the rect
 
-    var r1 = symmetryGroup(r, function() {
+    var r1 = r.iterate(5, function() {
       this.translate(10,10,);
-    }, 5);
+    });
 
 This creates a series of squares in a diagonal line (each one
 moving 10 on the x-axis and 10 on the y-axis from the previous
 square.)
 
-**create a nested symmetry** from the diagonal series of squares:
+The transformation function is called in the context of the most
+recently iterated [copied] element, so `this` is evaluated as the
+Raphael object to transform.
 
-    var r2 = symmetryGroup(r1, function() {
+**create a nested iteration** from the diagonal series of squares:
+
+    var r2 = r1.iterate(5, function() {
       this.translate(20, 0);
-    }, 5);
+    });
    
-Note that `r1` is passed as the root element above. This repeats the
-_series_ (symmetry group) of squares, created as r1, 20 pixels apart
-along the x-axis.
+Note that `r1` is the iteration group returned from the previous iterate
+call; it also has the iterate method, though it is not a real Raphael
+element. (It mimics many of its methods, though.) 
 
 ## Raphael extensions ##
 
 ### rotateAround(degree, cx, cy) ###
 
-This method is provided on all Raphael and SymmetryGroup objects
+This method is provided on all Raphael and iteration objects,
 mostly to allow for additive rotations with a 'pivot' point defined.
 For a Raphael object this is not much different than rotate(degree, x, y)
 except that the rotation is additive and `cx` and `cy` are _relative_
 to the Raphael object.
 
-Its real use is for symmetry groups. A symmetry group created as such:
+Its real use is for iteration. An iterated group created as such:
 
-    var s = symmetryGroup(theRect, function() {
+    var s = theRect.iterate(3, function() {
       this.rotateAround(90, 20, 0);
-    }, 3)
+    })
    
 will create 3 more elements, each rotated an additional 90 degrees
 around a point 20,0 relative to the root (`theRect`).
