@@ -17,7 +17,7 @@
       return new F();
     };
   }
-  
+
   // helper function
   function degToRad(deg) {
     return (deg * (2 * Math.PI)) / 360;
@@ -180,6 +180,9 @@
         that.transFunc.call(c);
         that.elements.push(c);
       });
+      //if (this.root.type === "iteration") {
+      //  this.root.apply();
+      //}
     }
 
     // Reset the current cloned element array
@@ -207,7 +210,13 @@
 
     function translate(dx, dy) {
       this.root.translate(dx, dy);
-      this.apply();
+      if (this.elements.length) {
+        _.each(this.elements, function (el) {
+          el.translate(dx, dy);
+        });
+      } else {
+        this.apply();
+      }
     }
 
     function scale(dx, dy) {
@@ -217,7 +226,13 @@
     }
 
     function clone() {
-      var c = iterate.call(this.root.clone(), this.transN, this.transFunc);
+      _els = [];
+      if (this.elements.length) {
+        _els = _.map(this.elements, function(el) {
+          return el.clone();
+        });
+      }
+      var c = iterate.call(this.root.clone(), this.transN, this.transFunc, _els);
       return c;
     }
 
@@ -237,10 +252,10 @@
       return this.root.getBBox(); // TODO... actually make this right? (just used for x/y currently)
     }
     
-    return function iterate(transN, transFunc) {
+    return function iterate(transN, transFunc, _els) {
 
       var _root = this; // the calling object (a raphael element or iteration group)
-      var _elements = [];
+      var _elements = _els || [];
       var _func, _n;
 
       // Interpret arguments
@@ -279,12 +294,15 @@
       };
       
 
-      obj.apply();
+      if (!obj.elements.length) {
+        obj.apply();
+      }
+      //obj.apply();
       return obj;
 
-    }
+    };
 
-  }())
+  }());
 
   Raphael.el.iterate = iterate;
 
