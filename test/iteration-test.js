@@ -47,8 +47,8 @@
         this.translate(10, 0);
       });
       // For some reason asserting equivalance between
-      // r and s.root() creates an infinite loop, so...
-      assertEquals("bar", s.root()['foo']);
+      // r and s.root creates an infinite loop, so...
+      assertEquals("bar", s.root['foo']);
     }
   });
 
@@ -63,9 +63,9 @@
       var s = r.iterate(function() {
         this.translate(10, 0);
       });
-      assertEquals(1, s.elements().length);
+      assertEquals(1, s.elements.length);
 
-      var el = _.last(s.elements()); // get the last of the elements array
+      var el = _.last(s.elements); // get the last of the elements array
       assertEquals(20, getX(el)); // element has moved 10
     },
 
@@ -75,12 +75,12 @@
       var s = r.iterate(3, function () {
         this.translate(10,0);
       });
-      assertEquals(3, s.elements().length);
+      assertEquals(3, s.elements.length);
       // translation should increment
-      assertEquals(10, getX(s.root()));
-      assertEquals(20, getX(s.elements()[0]));
-      assertEquals(30, getX(s.elements()[1]));
-      assertEquals(40, getX(s.elements()[2]));
+      assertEquals(10, getX(s.root));
+      assertEquals(20, getX(s.elements[0]));
+      assertEquals(30, getX(s.elements[1]));
+      assertEquals(40, getX(s.elements[2]));
     },
 
     "test translates all elements":
@@ -90,10 +90,10 @@
         this.translate(10,0);
       });
       s.translate(10, 0);
-      assertEquals(20, getX(s.root()));
-      assertEquals(30, getX(s.elements()[0]));
-      assertEquals(40, getX(s.elements()[1]));
-      assertEquals(50, getX(s.elements()[2]));
+      assertEquals(20, getX(s.root));
+      assertEquals(30, getX(s.elements[0]));
+      assertEquals(40, getX(s.elements[1]));
+      assertEquals(50, getX(s.elements[2]));
     }
   });
 
@@ -108,8 +108,8 @@
         this.translate(10,0);
       });
       s.scale(2, 2);
-      assertEquals(2, s.root().scale()['x']);
-      assertEquals(2, s.root().scale()['y']);
+      assertEquals(2, s.root.scale()['x']);
+      assertEquals(2, s.root.scale()['y']);
       assertEquals(2, s.scale()['y']);
       assertEquals(r.scale(), s.scale());
     }
@@ -126,12 +126,12 @@
       });
       var c = s.clone();
       assertEquals("iteration", c.type);
-      assertEquals(10, getX(c.root()));
-      assertEquals(s.elements().length, c.elements().length);
+      assertEquals(10, getX(c.root));
+      assertEquals(s.elements.length, c.elements.length);
       // move the clone 10
       c.translate(10, 0);
-      assertEquals(20, getX(c.root()));
-      assertEquals(10, getX(s.root()));
+      assertEquals(20, getX(c.root));
+      assertEquals(10, getX(s.root));
     },
 
     "test attr() returns the root element's attr()": function () {
@@ -150,7 +150,7 @@
       assertFalse(s.removed);
       s.remove();
       assert(r.removed);
-      assert(s.elements()[0].removed);
+      assert(s.elements[0].removed);
       assert(s.removed);
     }
   });
@@ -165,13 +165,14 @@
       var s = r.iterate(3, function () {
         this.translate(10,0);
       });
+      s['foo'] = 'bar';
       // now create an iteration using the previous iteration
       var s1 = s.iterate(3, function () {
         this.translate(0, 10);
       });
-      assertEquals(s1.root(), s);
-      assertEquals(3, s1.elements().length);
-      assertEquals("iteration", s1.elements()[0].type);
+      assertEquals(s1.root['foo'], 'bar');
+      assertEquals(3, s1.elements.length);
+      assertEquals("iteration", s1.elements[0].type);
     },
 
     "test applies nested transformations":
@@ -184,10 +185,10 @@
       var s1 = s.iterate(3, function () {
         this.translate(0, 10);
       });
-      var s1g0 = s1.root();
-      var s1g1 = s1.elements()[0];
-      var s1g2 = s1.elements()[1];
-      var s1g3 = s1.elements()[2];
+      var s1g0 = s1.root;
+      var s1g1 = s1.elements[0];
+      var s1g2 = s1.elements[1];
+      var s1g3 = s1.elements[2];
 
       // assert that nested groups are transformed
       assertEquals(10, getY(s1g0));

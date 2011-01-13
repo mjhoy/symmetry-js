@@ -2,11 +2,11 @@
 
   // helper functions
   function getX(el) {
-    return el.attr()['x'];
+    return el.getBBox()['x'];
   }
 
   function getY(el) {
-    return el.attr()['y'];
+    return el.getBBox()['y'];
   }
   // set up the DOM with a raphael div
   function raphSetUp () {
@@ -173,15 +173,14 @@
       var paper = this.paper,
       root, r, ox, oy, nx, ny;
       root = paper.rect(10, 10, 10, 10);
-      root = paper.rect(10, 10, 10, 10);
       r = root.iterate(3, function () {
         this.rotateAround(90, 20, 0);
       });
 
       assertEquals(0, r.rotate());
-      assertEquals(90, r.elements()[0].rotate());
-      assertEquals(180, r.elements()[1].rotate());
-      assertEquals(270, r.elements()[2].rotate());
+      assertEquals(90, r.elements[0].rotate());
+      assertEquals(180, r.elements[1].rotate());
+      assertEquals(270, r.elements[2].rotate());
     },
 
     "test sets incremental rotation in nested iteration":
@@ -198,9 +197,9 @@
       });
 
       assertEquals(0, r2.rotate());
-      assertEquals(90, r2.elements()[0].rotate());
-      assertEquals(180, r2.elements()[1].rotate());
-      assertEquals(270, r2.elements()[2].rotate());
+      assertEquals(90, r2.elements[0].rotate());
+      assertEquals(180, r2.elements[1].rotate());
+      assertEquals(270, r2.elements[2].rotate());
     }
   });
 
