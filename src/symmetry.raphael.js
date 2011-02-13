@@ -210,13 +210,7 @@
 
     function translate(dx, dy) {
       this.root.translate(dx, dy);
-      if (this.elements.length) {
-        _.each(this.elements, function (el) {
-          el.translate(dx, dy);
-        });
-      } else {
-        this.apply();
-      }
+      this.apply();
     }
 
     function scale(dx, dy) {

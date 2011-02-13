@@ -6,20 +6,41 @@ Raphael.fn.indian = function (x, y) {
   return this.path("M0,0v56.596h23.304L19.632,45.58H6.658L6.414,8.127l11.016,17.136c0,0,1.282-17.291,1.224-17.594 S17.184,0,17.184,0H0z").translate(x, y);
 }
 
+var start = new Date();
+
 var paper = Raphael('raphael', 600, 600)
 
-var r = paper.indian(0, 10).attr({fill:'white'});
+var r = paper.indian(0, 10).attr({fill:'black'});
 
 var r1 = r.iterate(1, function() {
-  this.scale(-1, 1);
-  this.translate(23, 0);
+ this.scale(-1, 1);
+ this.translate(23, 0);
 });
 
 var r2 = r1.iterate(1, function() {
-  this.rotate(180)
-  this.translate(80, -10);
+ this.rotate(180)
+ this.translate(80, -10);
 });
 
 var r3 = r2.iterate(5, function() {
-  this.translate(115, 0);
+ this.translate(115, 0);
 });
+
+var r4 = r3.iterate(5, function () {
+  this.translate(0, 100);
+});
+
+var end = new Date();
+
+console.log("time: " + (end - start));
+
+
+//var o = paper.comma(120, 150).attr({fill:'black'})
+//
+//var o1 = o.iterate(2, function() {
+//  this.rotateAround(45, 50, 0);
+//});
+//
+//var o2 = o1.clone();
+//o2.translate(200, 0);
+//o2.scale(-1.0, 1.0);
