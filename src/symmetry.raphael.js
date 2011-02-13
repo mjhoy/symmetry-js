@@ -1,6 +1,6 @@
 /*
  * symmetry.raphael.js
- * by mjhoy, 2010
+ * mjhoy, 2010-11
  * 
  * requires: raphael, underscore.js
  */
