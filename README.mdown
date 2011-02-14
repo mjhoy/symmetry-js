@@ -25,7 +25,24 @@ not sure. Anyway, it was the above book which prompted me to write this,
 and try to allow for a programmatical way to perform symmetry operations in
 Raphael.
 
-### Usage: ###
+### Install ###
+
+symmetry.raphael.js currently depends on both the Raphael and Underscore
+JavaScript libraries. Run the `rake js:install` task included in this
+repository to download these to `lib/` (requires wget).
+
+### Test ###
+
+The tests require Google's [JsTestDriver][jstd]. To run, download the JsTestDriver
+jar file (JsTestDriver-1.2.2.jar) to e.g. `~bin/`. Run the server like so:
+`java -jar ~/bin/JsTestDriver-1.2.2.jar --port 4224`. Point a browser to the
+port used (4224) and "capture" it. Now, from the symmetry project root, 
+`java -jar ~/bin/JsTestDriver-1.2.2.jar --tests all` will run the test
+suite.
+
+[jstd]:http://code.google.com/p/js-test-driver/
+
+### Usage ###
 
 symmetry.raphael.js adds a new method `iterate` to Raphael elements, which
 takes an (optional) integer -- how many times the iteration is performed --
