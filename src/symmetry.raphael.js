@@ -280,6 +280,14 @@ Raphael.el.iterate = (function () {
     return c;
   }
 
+  function animate(newAttrs, ms, callback) {
+    _.each(this.elements, function(el) {
+      el.animate(newAttrs, ms, callback);
+    })
+    this.root.animate(newAttrs, ms, callback);
+    return this;
+  }
+
   function remove() {
     _.each(this.elements, function(el) {
       el.remove();
@@ -332,6 +340,7 @@ Raphael.el.iterate = (function () {
       clone: clone,
       remove: remove,
       attr: attr,
+      animate: animate,
       getBBox: getBBox,
       removed: false, // TODO: should copy from root element?
       type: "iteration"
