@@ -6,6 +6,10 @@ _[ NB: very work-in-progress ]_
 
 _requires Raphael and underscore.js_
 
+See [my related blog post][sympost].
+
+[sympost]:http://mjhoy.name/articles/symmetry
+
 ## Symmetry Groups ##
 
 Peter S. Stevens, in _Handbook of Regular Patterns_, defines a "symmetry
